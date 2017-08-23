@@ -85,7 +85,7 @@ my $content_body = {
 
 
 	     
-$content_body = undef;
+
 #my $request = HTTP::Request->new(POST=> $opts{"gconn_http_base"} . "-list");
 my $request = create_http_request_gconn("POST",$opts{"gconn_http_base"} . "-list","application/json",$content_body);
 
