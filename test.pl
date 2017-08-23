@@ -85,15 +85,15 @@ my $content_body = {
 
 
 	     
-
+$content_body=undef;
 #my $request = HTTP::Request->new(POST=> $opts{"gconn_http_base"} . "-list");
 my $request = create_http_request_gconn("POST",$opts{"gconn_http_base"} . "-list","application/json",$content_body);
 
 
 my $response = $ua->request($request);
-say $response->is_success;
-say $response->content;
-say $response->status_line;
+ok($response->is_success == 1, "A success");
+like( $response->content, qr/No mirrored repos/, "No mirrored repos");
+like( $response->status_line, qr/200/, "Success 200");
 
 
 
