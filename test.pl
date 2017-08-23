@@ -83,13 +83,12 @@ my $content_body = {
 	       "git_url" => "http://hsm-gitlabee.das.perforce.com/root/public_repo.git"
 	      };
 
-my $content_json = encode_json $content_body;
-	     
 
-my $request = HTTP::Request->new(POST=> $opts{"gconn_http_base"} . "-list");
-$request->header("Authorization" => "Basic bm9zdWNodXNlcjpub3N1Y2hwYXNzd29yZA==");
-$request->header("Content-Type" => "application/json");
-$request->content($content_json);
+	     
+$content_body = undef;
+#my $request = HTTP::Request->new(POST=> $opts{"gconn_http_base"} . "-list");
+my $request = create_http_request_gconn("POST",$opts{"gconn_http_base"} . "-list","application/json",$content_body);
+
 
 my $response = $ua->request($request);
 say $response->is_success;
@@ -100,6 +99,25 @@ say $response->status_line;
 
 
 ## Helper functions
+sub create_http_request_gconn {
+  my $method = shift;
+  my $url = shift;
+  my $content_type = shift;
+  my $request_body = shift;
+
+  my $request = HTTP::Request->new($method => $url);
+  $request->header("Authorization" => "Basic bm9zdWNodXNlcjpub3N1Y2hwYXNzd29yZA==");
+  $request->header("Content-Type" => $content_type);  
+  if (defined($content_body)) {
+    my $content_json = encode_json $content_body;
+    $request->content($content_json);
+  }
+
+  return $request;
+}
+
+
+
 sub run_cmd_server {
   my $login = shift;
   my $cmd = shift;
