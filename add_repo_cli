@@ -1,0 +1,1 @@
+ssh root@osiris "GCONN_CONFIG=/opt/perforce/git-connector/gconn.conf /opt/perforce/git-connector/bin/gconn --mirrorhooks add repo/brepo http://gitlabee9/root/brepo.git"

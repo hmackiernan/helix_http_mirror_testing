@@ -1,0 +1,1 @@
+ssh root@osiris "p4 -usuper -p 1666 repo -f -d //repo/brepo; rm -rf /opt/perforce/git-connector/repos/repo;"
