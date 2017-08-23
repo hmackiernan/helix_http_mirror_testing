@@ -78,8 +78,9 @@ print Dumper($retval);
 my $ua = LWP::UserAgent->new();
 $ua->ssl_opts("verify_hostname" => 0, "SSL_verify_mode"=>0x00);
 
-my $request = HTTP::Request->new(POST=> $opts{"gconn_http_base"});
-my $response = $ua->post($request);
+my $request = HTTP::Request->new(POST=> $opts{"gconn_http_base"} . "-list");
+$request->header("Authorization" => "Basic bm9zdWNodXNlcjpub3N1Y2hwYXNzd29yZA==");
+my $response = $ua->request($request);
 print Dumper($response);
 
 ## Helper functions
