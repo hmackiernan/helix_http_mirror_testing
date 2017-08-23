@@ -1,4 +1,4 @@
-use strict;
+use feature qw(say);
 use Net::SSH qw(ssh_cmd sshopen3 sshopen2);
 use Data::Dumper;
 use Getopt::Long;
@@ -6,7 +6,7 @@ use Test::More;
 use HTTP::Request;
 use HTTP::Response;
 use LWP::UserAgent;
-use JSON::Parse;
+use JSON;
 
 my $retval;
 
@@ -50,7 +50,7 @@ my %cmds = ("add" => $GCONN_COMMAND_PREAMBLE . " add " . $opts{'gconn_repo_cache
 	    
 print Dumper(\%cmds);
 
-
+if (0) {
 # TESTS
 # Test 1 empty - add
 print "About to run reset $cmds{'reset'}\n";
@@ -72,16 +72,32 @@ print Dumper($retval);
 print "About to run remove $cmds{'remove'}\n";
 $retval = &run_cmd_server($opts{'login'},$cmds{'remove'});
 print Dumper($retval);
+}
 
-
-#
+# Create a reuseable UserAgent
 my $ua = LWP::UserAgent->new();
 $ua->ssl_opts("verify_hostname" => 0, "SSL_verify_mode"=>0x00);
 
+my $content_body = {
+	       	"repo_name" => "//repo/public_repo",
+	       "git_url" => "http://hsm-gitlabee.das.perforce.com/root/public_repo.git"
+	      };
+
+my $content_json = encode_json $content_body;
+	     
+
 my $request = HTTP::Request->new(POST=> $opts{"gconn_http_base"} . "-list");
 $request->header("Authorization" => "Basic bm9zdWNodXNlcjpub3N1Y2hwYXNzd29yZA==");
+$request->header("Content-Type" => "application/json");
+$request->content($content_json);
+
 my $response = $ua->request($request);
-print Dumper($response);
+say $response->is_success;
+say $response->content;
+say $response->status_line;
+
+
+
 
 ## Helper functions
 sub run_cmd_server {
