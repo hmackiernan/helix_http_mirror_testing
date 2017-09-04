@@ -1,0 +1,52 @@
+When a mirror is added via HTTP:
+- the server returns a 500 error, but the the mirror appears to be created
+
+curl -k -X POST   https://osiris/mirrorhooks-add   -H 'authorization: Basic bm9zdWNodXNlcjpub3N1Y2hwYXNzd29yZA=='   -H 'cache-control: no-cache'   -H 'content-type: application/json'    -d '{"repo_name": "//repo/brepo", "git_url": "http://gitlabee9/root/brepo.git" }'
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>500 Internal Server Error</title>
+</head><body>
+<h1>Internal Server Error</h1>
+<p>The server encountered an internal error or
+misconfiguration and was unable to complete
+your request.</p>
+<p>Please contact the server administrator at 
+ [no address given] to inform them of the time this error occurred,
+ and the actions you performed just before this error.</p>
+<p>More information about this error may be available
+in the server error log.</p>
+<hr>
+<address>Apache/2.4.18 (Ubuntu) Server at osiris Port 443</address>
+</body></html>
+
+But:
+p4 -p osiris:1666 -u super repos
+//repo/brepo gconn-user  2017/08/23 12:46:10 Mirror of http://gitlabee9/root/brepo.git 
+
+> dir repos/repo/brepo.git/.mirror.config 
+-rw-rw-r-- 1 www-data www-data 178 Aug 23 12:46 repos/repo/brepo.git/.mirror.config
+
+
+- mirrorhooks list from both gconn and HTTP endpoint report the mirror exists:
+
+bin/gconn --mirrorhooks list
+//repo/brepo <<< http://gitlabee9/root/brepo.git
+
+curl -k -X POST   https://osiris/mirrorhooks-list   -H 'authorization: Basic bm9zdWNodXNlcjpub3N1Y2hwYXNzd29yZA=='   
+//repo/brepo <<< http://gitlabee9/root/brepo.git
+
+
+When a mirror is added via the gconn command line:
+
+> bin/gconn --mirrorhooks add repo/brepo http://gitlabee9/root/brepo.git
+   the mirror is (unsurprisingly) created (the repo, the cache, and the .mirror.config -- we always knew this worked)
+
+- mirrorhooks list from HTTP says invalid mirror config:
+
+> curl -k -X POST   https://osiris/mirrorhooks-list   -H 'authorization: Basic bm9zdWNodXNlcjpub3N1Y2hwYXNzd29yZA=='
+//repo/brepo <<< http://gitlabee9/root/brepo.git <<< Error: Invalid mirror config
+
+- but mirrorhooks list from the command line finds the mirror and reports it as valid
+
+> bin/gconn --mirrorhooks list
+//repo/brepo <<< http://gitlabee9/root/brepo.git

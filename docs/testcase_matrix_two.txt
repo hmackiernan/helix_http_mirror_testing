@@ -1,0 +1,57 @@
+# worksheet listing the various combinations of add/list/remove
+# both from HTTP and cmd line; historical interest only
+
+A (3)
+empty add
+empty list
+empty remove
+
+B (9)
+empty add add
+empty add list
+empty add remove
+
+empty list add
+empty list list
+empty list remove
+
+empty remove add
+empty remove remove
+empty remove list
+
+C (27)
+empty add add add
+empty add add list
+empty add add remove
+
+empty add list add
+empty add list list
+empty add list remove
+
+empty add remove add
+empty add remove list
+empty add remove remove
+
+empty list add add
+empty list add list
+empty list add remove
+
+empty list list add
+empty list list list
+empty list list remove
+
+empty list remove add
+empty list remove list
+empty list remove remove
+
+empty remove add add
+empty remove add list
+empty remove add remove
+
+empty remove remove add
+empty remove remove list
+empty remove remove remove
+
+empty remove list add
+empty remove list list
+empty remove list remove

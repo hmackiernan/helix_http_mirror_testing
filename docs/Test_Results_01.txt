@@ -1,0 +1,47 @@
+Start: Empty Gconn with no repos, empty cache (and therefore, necessarily, no .mirror.configs)
+
+list by the command line (OK- but missing a newline in status msg):
+bin/gconn --mirrorhooks list
+No mirrored repos.
+
+list by the http-endpoint (OK - but missing a newline)
+curl -k -X POST   https://osiris/mirrorhooks-list   -H 'authorization: Basic bm9zdWNodXNlcjpub3N1Y2hwYXNzd29yZA=='   
+No mirrored repos.
+
+
+add by the command line (OK):
+bin/gconn --mirrorhooks add repo/brepo http://gitlabee9/root/brepo.git
+
+list by the command line (OK):
+bin/gconn --mirrorhooks list
+//repo/brepo <<< http://gitlabee9/root/brepo.git
+
+list by the endpoint (OK)
+curl -k -X POST   https://osiris/mirrorhooks-list   -H 'authorization: Basic bm9zdWNodXNlcjpub3N1Y2hwYXNzd29yZA=='   
+//repo/brepo <<< http://gitlabee9/root/brepo.git <<< Error: Invalid mirror config
+
+remove by the command line (OK)
+bin/gconn --mirrorhooks remove repo/brepo
+Check: .mirror.config is removed
+
+list by the command line (OK):
+bin/gconn --mirrorhooks list
+//repo/brepo <<< http://gitlabee9/root/brepo.git  ... Not mirrored by this Gconn instance ( no mirror config )
+
+OK list by the http-endpoint:
+curl -k -X POST   https://osiris/mirrorhooks-list   -H 'authorization: Basic bm9zdWNodXNlcjpub3N1Y2hwYXNzd29yZA=='   
+//repo/brepo <<< http://gitlabee9/root/brepo.git  ... Not mirrored by this Gconn instance ( no mirror config )
+
+
+re-add from command line: (OK)
+bin/gconn --mirrorhooks add repo/brepo http://gitlabee9/root/brepo.git
+Error: repo repo/brepo.git already exists in cache.
+
+re-remove from command line: (OK)
+bin/gconn --mirrorhooks remove repo/brepo
+Error: unable to remove mirror configuration for repo repo/brepo.git : Missing mirror config
+
+## add from command line
+## remove from http-endpoint fails invalid mirror config
+## Claim:
+http-endpoints list and remove fail to recognize the mirror config written by the command line
