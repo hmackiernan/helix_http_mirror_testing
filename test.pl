@@ -50,8 +50,9 @@ my %cmds = ("add" => $GCONN_COMMAND_PREAMBLE . " add " . $opts{'gconn_repo_cache
 	    
 print Dumper(\%cmds);
 
-if (0) {
-# TESTS
+### TESTS
+
+if (0) { #temporarily shut off the gconn tests
 # Test 1 empty - add
 print "About to run reset $cmds{'reset'}\n";
 $retval = &run_cmd_server($opts{'login'},$cmds{'reset'});
@@ -72,7 +73,7 @@ print Dumper($retval);
 print "About to run remove $cmds{'remove'}\n";
 $retval = &run_cmd_server($opts{'login'},$cmds{'remove'});
 print Dumper($retval);
-}
+} #end if(0)
 
 # Create a reuseable UserAgent
 my $ua = LWP::UserAgent->new();
