@@ -1,3 +1,6 @@
+SEE ALSO: p4prod-managed gitlab API (and non-api) scripts for creating users, projects
+ALSO SEE ALSO: Postman queries saved in Postman for same; 
+
 semi-automation of adding mirror to Gconn via command line and via http endpoints
 
 test.pl is  perl script which can
